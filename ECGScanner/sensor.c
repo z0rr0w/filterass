@@ -6,11 +6,11 @@ int getNextData(FILE *file)
 {
 
 	int nextData;
-	if (fscanf(file, "%d", &nextData) == 1) {
+	if (fscanf(file, "%d", &nextData) != EOF) {
 		return nextData;
 	}
 
-	return 0; //end of file
+	return 9999; //end of file
 }
 
 FILE* openfile(const char* filename)

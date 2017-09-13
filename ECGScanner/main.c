@@ -14,11 +14,29 @@ int main()
 	FILE *file;                  // Pointer to a file object
 	file = openfile("ECG.txt");
 
-    getNextData(file);          // Read Data from Sensor
-                                
-    lowPassFilter();            // Filter Data
-                                
-    peakDetection(&qsr_params); // Perform Peak Detection
+	//int *arr = malloc(sizeof(int) * 40);
+	int* preLow[40] = { 0 };
+	int* postLow[40] = { 0 };
+	int* postHigh[40] = { 0 };
+	int* postDer[40] = { 0 };
+	int* postSqr[40] = { 0 };
+	int* postMWI[40] = { 0 };
+	int n = 0;
+	int nextData;
 
+	while((nextData=getNextData(file))!= 9999){        // Read Data from Sensor
+		preLow[n%40] = nextData;
+                                
+		lowPassFilter(n%40,preLow, postLow);            // Filter Data
+		printf("%d", postLow[n % 40]);
+
+
+
+	    peakDetection(&qsr_params); // Perform Peak Detection
+
+
+		++n;
+	}
+	//getchar();
 	return 0;
 }
