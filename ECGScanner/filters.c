@@ -20,3 +20,35 @@ void lowPassFilter(int n, int *x, int *y)
 
 
 }
+
+
+void highPassFilter(int n, int *x, int *y){
+
+	float temp = y[nCalc(n - 1)] - x[n]*0.03125f+x[nCalc(n-16)]- x[nCalc(n - 17)]+x[nCalc(n-32)]*0.03125f;
+	y[n] = (int)temp;
+
+
+
+
+
+}
+
+
+void derivativeFilter(int n, int *x, int *y) {
+
+	float temp = 0.125f*(2 * x[n] + x[nCalc(n - 1)] - x[nCalc(n - 3)] - 2 * x[nCalc(n - 4)]);
+	y[n] = (int)temp;
+
+
+}
+
+void sqrFilter(int n, int *x, int *y)
+{
+	int temp = x[n]* x[n];
+	y[n] = temp;
+
+
+}
+
+
+

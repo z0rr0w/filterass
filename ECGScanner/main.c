@@ -14,7 +14,7 @@ int main()
 	FILE *file;                  // Pointer to a file object
 	file = openfile("ECG.txt");
 
-	//int *arr = malloc(sizeof(int) * 40);
+	
 	int* preLow[40] = { 0 };
 	int* postLow[40] = { 0 };
 	int* postHigh[40] = { 0 };
@@ -28,7 +28,10 @@ int main()
 		preLow[n%40] = nextData;
                                 
 		lowPassFilter(n%40,preLow, postLow);            // Filter Data
-		printf("%d", postLow[n % 40]);
+		highPassFilter(n % 40, postLow, postHigh);
+		derivativeFilter(n % 40, postHigh, postDer);
+		sqrFilter(n % 40, postDer, postSqr);
+		printf("%d\n", postSqr[n % 40]);
 
 
 
@@ -37,6 +40,6 @@ int main()
 
 		++n;
 	}
-	//getchar();
+	getchar();
 	return 0;
 }
