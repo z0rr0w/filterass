@@ -31,7 +31,7 @@ int main()
 		highPassFilter(n % 40, postLow, postHigh);
 		derivativeFilter(n % 40, postHigh, postDer);
 		sqrFilter(n % 40, postDer, postSqr);
-		printf("%d\n", postSqr[n % 40]);
+		printf("%d\n", postLow[n % 40]);
 
 
 
