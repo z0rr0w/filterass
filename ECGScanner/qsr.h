@@ -16,7 +16,17 @@ typedef struct QRS_params
    
 } QRS_params;
 
+typedef struct peakTuple {
+	int peakVal; // or char strVal[20];
+	int peakPos;
+} peakTuple;
+
 // Feel free to change and add methods
-void peakDetection(QRS_params *params);
+void peakDetection(QRS_params *, int*, int);
+
+int rCalc(int n);
+int avg1();
+int avg2();
+peakTuple searchBack(QRS_params *params);
 
 #endif // QSR_H
