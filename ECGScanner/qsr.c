@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 struct peakTuple PEAKS[5000];
 struct peakTuple rPeaks[5000];
 int peakCount = 0,
@@ -61,10 +60,8 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 		PEAKS[peakCount].peakPos = n;
 		PEAKS[peakCount].peakVal = peakX2;
 		if (peakX2 > (*params).THRESHOLD1) { //remember to do fun stuff with threshold1 it needs to be calgulated.
-			
 			if (rPeakCount = 0) {
 				RR = PEAKS[peakCount].peakPos;
-				
 			}
 			else {
 				RR = PEAKS[peakCount].peakPos - rPeaks[rPeakCount].peakPos;
