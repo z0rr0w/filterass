@@ -1,3 +1,4 @@
+#include <stdio.h>
 #ifndef QSR_H
 #define QSR_H
 
@@ -22,7 +23,7 @@ typedef struct peakTuple {
 } peakTuple;
 
 // Feel free to change and add methods
-void peakDetection(QRS_params *, int*, int);
+void peakDetection(QRS_params *, int*, int, FILE *);
 
 int rCalc(int n);
 int avg1();

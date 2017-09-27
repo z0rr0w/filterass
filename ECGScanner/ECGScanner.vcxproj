@@ -128,6 +128,7 @@
     <Text Include="ECG.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </Text>
+    <Text Include="ECG900K.txt" />
     <Text Include="Output.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

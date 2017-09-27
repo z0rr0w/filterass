@@ -15,8 +15,8 @@ RR_Average1 = 0,
 RR_Average2 = 0,
 RR_MISS =180;
 
-int RecentRR[8] = { 151, 151, 151, 151, 151, 151, 151, 151};
-int RecentRR_OK[8] = { 151, 151, 151, 151, 151, 151, 151, 151};
+int RecentRR[8] = { 151, 151, 151, 151, 151, 151, 151, 151}; //CHANGE THIS SO ITS POPULATED WITH FIRST FOUND rr INTERVAL
+int RecentRR_OK[8] = {  151, 151, 151, 151, 151, 151, 151, 151};
 
 int rCalc(int n) {
 	if (n < 0) {
@@ -51,7 +51,7 @@ peakTuple searchBack(QRS_params *params) {
 	//IF INFINITE LOOP CHANGE RETURN STATEMENT TO HANDLE MISSING PEAK
 }
 
-void peakDetection(QRS_params *params, int* postMWI, int n)
+void peakDetection(QRS_params *params, int* postMWI, int n, FILE *output)
 {
 	if (peakX2 > peakX1 && peakX2 > postMWI[n % 40]) {  //if a peak is found, save value and position (position being the n'th data input)
 		PEAKS[peakCount].peakPos = n;
@@ -66,7 +66,8 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 			}
 			if (RR_LOW < RR && RR < RR_HIGH) {
 				rPeaks[rPeakCount] = PEAKS[peakCount];
-				printf("%d %d\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
+				//printf("%d %d\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
+				fprintf(output, "%d %d\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
 				rPeakCount++;
 				(*params).SPKF = PEAKS[peakCount].peakVal/8 + 7*(*params).SPKF/8;
 				RecentRR[rCalc((rPeakCount-1)%8)]=RR, RecentRR_OK[rCalc((rPeakCount-1)%8)] = RR; //rCalc might be superfluous (redundant)
@@ -84,7 +85,8 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 					peakTuple temp = searchBack(params);
 					if (temp.peakPos != -1) {
 						rPeaks[rPeakCount] = temp;
-						printf("%d %d sb\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
+						//printf("%d %d sb\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
+						fprintf(output, "%d %d\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
 						(*params).SPKF =  (temp.peakVal)/4 + 3*(*params).SPKF/4;
 						RecentRR[rCalc(rPeakCount % 8)] = RR;
 						rPeakCount++;

@@ -9,7 +9,7 @@ int getNextData(FILE *file)
 		return nextData;
 	}
 
-	return 9999; //end of file
+	return INT_MIN; //end of file
 }
 
 FILE* openfile(const char* filename)

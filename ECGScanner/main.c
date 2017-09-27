@@ -18,6 +18,10 @@ int main()
 
 	FILE *file;                  // Pointer to a file object
 	file = openfile("ECG.txt");
+
+	FILE *output = fopen("Output.txt","w");
+
+
 	
 	int* preLow[40] = { 0 };
 	int* postLow[40] = { 0 };
@@ -34,7 +38,7 @@ int main()
 	int n = 0;
 	int nextData;
 
-	while((nextData=getNextData(file))!= 9999){        // Read Data from Sensor
+	while((nextData=getNextData(file))!= INT_MIN){        // Read Data from Sensor
 		preLow[n%40] = nextData;
                                 
 		lowPassFilter(n%40,preLow, postLow);            // Filter Data
@@ -43,7 +47,7 @@ int main()
 		sqrFilter(n % 40, postDer, postSqr);
 		mwiFilter(n % 40, postSqr, postMWI);
 
-		peakDetection(&qsr_params,postMWI,n);
+		peakDetection(&qsr_params,postMWI,n,output);
 		
 		//printf("%d\n", postLow[n % 40]); //for testing
 
@@ -52,5 +56,6 @@ int main()
 		++n;
 	}
 	getchar();
+	fclose(output);
 	return 0;
 }
