@@ -18,6 +18,14 @@ int main()
 
 	FILE *file;                  // Pointer to a file object
 	file = openfile("ECG.txt");
+
+
+	FILE *f = fopen("Output.txt", "w");
+	if (f == NULL)
+	{
+		printf("Error opening file!\n");
+		exit(1);
+	}
 	
 	int* preLow[40] = { 0 };
 	int* postLow[40] = { 0 };
@@ -43,14 +51,17 @@ int main()
 		sqrFilter(n % 40, postDer, postSqr);
 		mwiFilter(n % 40, postSqr, postMWI);
 
-		peakDetection(&qsr_params,postMWI,n);
+		//peakDetection(&qsr_params,postMWI,n);
 		
 		//printf("%d\n", postMWI[n % 40]); //for testing
+		
+		fprintf(f, "%d\n", postMWI[n % 40]);
 
 	   // peakDetection(&qsr_params); // Perform Peak Detection
 
 		++n;
 	}
-	getchar();
+	fclose(f);
+	//getchar();
 	return 0;
 }

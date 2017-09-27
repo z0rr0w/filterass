@@ -15,7 +15,7 @@ void lowPassFilter(int n, int *x, int *y) {
 
 
 void highPassFilter(int n, int *x, int *y) {
-	y[n] = y[nCalc(n - 1)] - x[n]/32+x[nCalc(n-16)]- x[nCalc(n - 17)]+x[nCalc(n-32)]/32;
+	y[n] = y[nCalc(n - 1)] - (x[n]/32) + x[nCalc(n-16)]- x[nCalc(n - 17)]+(x[nCalc(n-32)]/32);
 }
 
 
@@ -33,5 +33,5 @@ void mwiFilter(int n, int *x, int *y) {
 	for (int i = 1; i <= mwiWindow; i++) {
 		y[n] += x[nCalc(n -(mwiWindow - i))];
 	}
-	y[n] = y[n] / mwiWindow;
+	y[n] = y[n]/mwiWindow;
 }
