@@ -11,10 +11,10 @@
 int main()
 {	
 	QRS_params qsr_params = { 0 };       // Instance of the made avaiable through: #include "qsr.h"
-	/*qsr_params.NPKF = 0;
+	qsr_params.NPKF = 0;
 	qsr_params.SPKF = 0;
-	qsr_params.THRESHOLD1 = 0;
-	qsr_params.THRESHOLD2 = 0;*/
+	qsr_params.THRESHOLD1 = 500;
+	qsr_params.THRESHOLD2 = 250;
 
 	FILE *file;                  // Pointer to a file object
 	file = openfile("ECG.txt");
@@ -45,7 +45,7 @@ int main()
 
 		peakDetection(&qsr_params,postMWI,n);
 		
-		//printf("%d\n", postMWI[n % 40]); //for testing
+		//printf("%d\n", postLow[n % 40]); //for testing
 
 	   // peakDetection(&qsr_params); // Perform Peak Detection
 
