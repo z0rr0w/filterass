@@ -13,11 +13,9 @@ void lowPassFilter(int n, int *x, int *y) {
 	y[n] = (2 * y[nCalc(n-1)]) - y[nCalc(n-2)] + (x[n] - (2*x[nCalc(n-6)])+x[nCalc(n-12)])/32;
 }
 
-
 void highPassFilter(int n, int *x, int *y) {
 	y[n] = y[nCalc(n - 1)] - (x[n]/32) + x[nCalc(n-16)]- x[nCalc(n - 17)]+(x[nCalc(n-32)]/32);
 }
-
 
 void derivativeFilter(int n, int *x, int *y) {
 	y[n] = (2 * x[n] + x[nCalc(n - 1)] - x[nCalc(n - 3)] - 2 * x[nCalc(n - 4)])/8;

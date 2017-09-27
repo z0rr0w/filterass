@@ -8,8 +8,7 @@
 // The functions and object predefined are just for inspiration.
 // Please change orden,names arguments to fit your solution.
 
-int main()
-{	
+int main() {	
 	QRS_params qsr_params = { 0 };       // Instance of the made avaiable through: #include "qsr.h"
 	/*qsr_params.NPKF = 0;
 	qsr_params.SPKF = 0;
@@ -19,14 +18,14 @@ int main()
 	FILE *file;                  // Pointer to a file object
 	file = openfile("ECG.txt");
 
-
+	/*
 	FILE *f = fopen("Output.txt", "w");
 	if (f == NULL)
 	{
 		printf("Error opening file!\n");
 		exit(1);
 	}
-	
+	*/
 	int* preLow[40] = { 0 };
 	int* postLow[40] = { 0 };
 	int* postHigh[40] = { 0 };
@@ -51,17 +50,17 @@ int main()
 		sqrFilter(n % 40, postDer, postSqr);
 		mwiFilter(n % 40, postSqr, postMWI);
 
-		//peakDetection(&qsr_params,postMWI,n);
+		peakDetection(&qsr_params,postMWI,n);
 		
 		//printf("%d\n", postMWI[n % 40]); //for testing
 		
-		fprintf(f, "%d\n", postMWI[n % 40]);
+		//fprintf(f, "%d\n", postMWI[n % 40]);
 
-	   // peakDetection(&qsr_params); // Perform Peak Detection
+	    //peakDetection(&qsr_params); // Perform Peak Detection
 
 		++n;
 	}
-	fclose(f);
-	//getchar();
+	//fclose(f);
+	getchar();
 	return 0;
 }

@@ -18,10 +18,7 @@ RR_MISS = 0;
 int RecentRR[8] = { 0 };
 int RecentRR_OK[8] = { 0 };
 
-//int NPKF = 0;
-//int SPKF = 0;
-
-int rCalc(int n) {
+int rCalc(int n) { // Prevent negative values of n
 	if (n < 0) {
 		return 40 + n;
 	}
@@ -45,8 +42,8 @@ int avg2() {		//Averages RecentRR_OK
 }
 
 peakTuple searchBack(QRS_params *params) {
-	for (int i = peakCount; i > 0; i--) {
-		if (PEAKS[i].peakVal > (*params).THRESHOLD2)
+	for (int i = peakCount; i > 0; i--) { // Search backwards through peaks, and find peak 2
+		if (PEAKS[i].peakVal > (*params).THRESHOLD2) // Peak 2 is given, as being greater than THRESHOLD2
 			return PEAKS[i];
 	}
 	peakTuple error = { -1 };
@@ -54,13 +51,12 @@ peakTuple searchBack(QRS_params *params) {
 	//IF INFINITE LOOP CHANGE RETURN STATEMENT TO HANDLE MISSING PEAK
 }
 
-void peakDetection(QRS_params *params, int* postMWI, int n)
-{
+void peakDetection(QRS_params *params, int* postMWI, int n) {
 	if (peakX2 > peakX1 && peakX2 > postMWI[n % 40]) {  //if a peak is found, save value and position (position being the n'th data input)
 		PEAKS[peakCount].peakPos = n;
 		PEAKS[peakCount].peakVal = peakX2;
 		if (peakX2 > (*params).THRESHOLD1) { //remember to do fun stuff with threshold1 it needs to be calgulated.
-			if (rPeakCount = 0) {
+			if (rPeakCount == 0) {
 				RR = PEAKS[peakCount].peakPos;
 			}
 			else {
@@ -68,10 +64,11 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 			}
 			if (RR_LOW < RR && RR < RR_HIGH) {
 				rPeaks[rPeakCount] = PEAKS[peakCount];
-				//printf("%d\n", rPeaks[rPeakCount].peakPos);
+				printf("%d\n", rPeaks[rPeakCount].peakPos);
 				rPeakCount++;
 				(*params).SPKF = (125 * PEAKS[peakCount].peakVal + 875*(*params).SPKF)/ 1000;
-				RecentRR[rCalc(rPeakCount%8)], RecentRR_OK[rCalc(rPeakCount%8)] = RR; //rCalc might be superfluous (redundant)
+				RecentRR[rCalc(rPeakCount % 8)] = RR;
+				RecentRR_OK[rCalc(rPeakCount % 8)] = RR; //rCalc might be superfluous (redundant)
 				RR_Average2 = avg2();
 				RR_Average1 = avg1();
 				RR_LOW = 92 * RR_Average2 / 100;
@@ -81,25 +78,25 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 				(*params).THRESHOLD2 = (*params).THRESHOLD1 / 2;
 			}
 			else {
-				if (RR > RR_MISS) {
-					peakTuple temp = searchBack(params);
-					if (temp.peakPos != -1) {
-						rPeaks[rPeakCount] = temp;
-						printf("%d\n", rPeaks[rPeakCount].peakPos);
-						(*params).SPKF = (25 * (temp.peakVal) + 75 * ((*params).SPKF)) / 100;
-						RecentRR[rCalc(rPeakCount % 8)];
-						rPeakCount++;
-						RR_Average1 = avg1();
-						RR_LOW = 92 * RR_Average1 / 100;
-						RR_HIGH = 116 * RR_Average1 / 100;
-						RR_MISS = 166 * RR_Average1 / 100;
-						(*params).THRESHOLD1 = (*params).NPKF + 25 * ((*params).SPKF - (*params).NPKF) / 100;
+				if (RR > RR_MISS) { 
+					peakTuple temp = searchBack(params); // Start searching through the 8 most recent peaks
+					if (temp.peakPos != -1) { // If a valid previous peak was found...
+						rPeaks[rPeakCount] = temp; // Save the old peak, as a valid rPeak
+						printf("%d\n", rPeaks[rPeakCount].peakPos); // Print this rPeak
+						(*params).SPKF = (25 * (temp.peakVal) + 75 * ((*params).SPKF)) / 100; // Calculate SPKF
+						RecentRR[rCalc(rPeakCount % 8)] = RR; // Store the RecentRR, with this peak 
+						rPeakCount++; // Increment rPeakCounter, to prepare for the next rPeak
+						RR_Average1 = avg1(); // Calculate the RR_Average
+						RR_LOW = 92 * RR_Average1 / 100; // RR_LOW is 92% of RR_Average1
+						RR_HIGH = 116 * RR_Average1 / 100; // RR_HIGH is 116% of RR_Average1
+						RR_MISS = 166 * RR_Average1 / 100; // RR_MISS is 166% of RR_Average1
+						(*params).THRESHOLD1 = (*params).NPKF + 25 * ((*params).SPKF - (*params).NPKF) / 100; // Update thresholds
 						(*params).THRESHOLD2 = (*params).THRESHOLD1 / 2;
 					}
 				}
 			}
 		}
-		else {
+		else { // if peakX2 wasn't greater than THRESHOLD1...
 			(*params).NPKF = (125 * peakX2 + 875 * (*params).NPKF) / 1000;
 			(*params).THRESHOLD1 = (*params).NPKF + ((*params).SPKF - (*params).NPKF)*25/100; //TODO: find out if it's smart to round before division.
 			(*params).THRESHOLD2 = (*params).THRESHOLD1 / 2;
