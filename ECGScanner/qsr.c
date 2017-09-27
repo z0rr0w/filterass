@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct peakTuple PEAKS[5000];
-struct peakTuple rPeaks[5000];
+struct peakTuple PEAKS[256];
+struct peakTuple rPeaks[256];
 int peakCount = 0,
 rPeakCount = 0,
 peakX1 = 0,
@@ -17,8 +17,22 @@ RR_MISS = 180;
 FILE *output ;
 FILE *mwiData;
 
-int RecentRR[8] = { 151, 151, 151, 151, 151, 151, 151, 151}; //CHANGE THIS SO ITS POPULATED WITH FIRST FOUND rr INTERVAL
-int RecentRR_OK[8] = {  151, 151, 151, 151, 151, 151, 151, 151};
+void addToPeaks(peakTuple peak) {
+	if (peakCount == sizeof(PEAKS)/sizeof(PEAKS[0])){
+		peakCount = 0;
+	}
+	PEAKS[peakCount] = peak;
+}
+
+void addToRPeaks(peakTuple peak) {
+	if (rPeakCount == sizeof(rPeaks) / sizeof(rPeaks[0])) {
+		rPeakCount = 0;
+	}
+	rPeaks[rPeakCount] = peak;
+}
+
+int RecentRR[8] = { 0 }; //151, 151, 151, 151, 151, 151, 151, 151}; //CHANGE THIS SO ITS POPULATED WITH FIRST FOUND rr INTERVAL
+int RecentRR_OK[8] = { 0 }; //151, 151, 151, 151, 151, 151, 151, 151};
 
 void fileSetup() {
 	output = fopen("Output.txt", "w");
@@ -66,18 +80,29 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 {
 	fprintf(mwiData, "%d\n",postMWI[n % 40]);
 	if (peakX2 > peakX1 && peakX2 > postMWI[n % 40]) {  //if a peak is found, save value and position (position being the n'th data input)
-		PEAKS[peakCount].peakPos = n;
-		PEAKS[peakCount].peakVal = peakX2;
+		peakTuple temp;
+		temp.peakPos = n;
+		temp.peakVal = peakX2;
+		addToPeaks(temp);
+		//PEAKS[peakCount].peakPos = n;
+		//PEAKS[peakCount].peakVal = peakX2;
 		
 		if (peakX2 > (*params).THRESHOLD1) { //remember to do fun stuff with threshold1 it needs to be calgulated.
 			if (rPeakCount == 0) {
 				RR = PEAKS[peakCount].peakPos;
+				for (int i = 0; i < 8; i++) {
+					RecentRR[i] = RR;
+				}
+				for (int i = 0; i < 8; i++) {
+					RecentRR_OK[i] = RR;
+				}
 			}
 			else {
 				RR = PEAKS[peakCount].peakPos - rPeaks[rPeakCount-1].peakPos;
 			}
 			if (RR_LOW < RR && RR < RR_HIGH) {
-				rPeaks[rPeakCount] = PEAKS[peakCount];
+				addToRPeaks(PEAKS[peakCount]);
+				//rPeaks[rPeakCount] = PEAKS[peakCount];
 				//printf("%d %d\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
 				fprintf(output, "%d %d\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
 				rPeakCount++;
@@ -96,7 +121,8 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 				if (RR > RR_MISS) {
 					peakTuple temp = searchBack(params);
 					if (temp.peakPos != -1) {
-						rPeaks[rPeakCount] = temp;
+						addToRPeaks(temp);
+						//rPeaks[rPeakCount] = temp;
 						//printf("%d %d sb\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
 						fprintf(output, "%d %d\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
 						(*params).SPKF =  (temp.peakVal)/4 + 3*(*params).SPKF/4;

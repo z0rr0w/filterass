@@ -28,6 +28,9 @@ void peakDetection(QRS_params *, int*, int);
 void fileSetup();
 void fileClose();
 
+void addToPeaks(peakTuple peak);
+void addToRPeaks(peakTuple peak);
+
 int rCalc(int n);
 int avg1();
 int avg2();
