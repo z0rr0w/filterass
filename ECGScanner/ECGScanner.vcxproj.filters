@@ -49,5 +49,8 @@
     <Text Include="ECG900K.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="mwiOut.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

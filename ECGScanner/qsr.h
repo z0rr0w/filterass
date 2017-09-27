@@ -23,7 +23,10 @@ typedef struct peakTuple {
 } peakTuple;
 
 // Feel free to change and add methods
-void peakDetection(QRS_params *, int*, int, FILE *);
+void peakDetection(QRS_params *, int*, int);
+
+void fileSetup();
+void fileClose();
 
 int rCalc(int n);
 int avg1();

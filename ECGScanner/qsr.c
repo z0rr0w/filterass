@@ -10,13 +10,24 @@ peakX1 = 0,
 peakX2 = 0,
 RR = 0,
 RR_LOW = -1,
-RR_HIGH =INT_MAX,
+RR_HIGH = INT_MAX,
 RR_Average1 = 0,
 RR_Average2 = 0,
-RR_MISS =180;
+RR_MISS = 180;
+FILE *output ;
+FILE *mwiData;
 
 int RecentRR[8] = { 151, 151, 151, 151, 151, 151, 151, 151}; //CHANGE THIS SO ITS POPULATED WITH FIRST FOUND rr INTERVAL
 int RecentRR_OK[8] = {  151, 151, 151, 151, 151, 151, 151, 151};
+
+void fileSetup() {
+	output = fopen("Output.txt", "w");
+	mwiData = fopen("mwiOut.txt", "w");
+}
+void fileClose() {
+	fclose(output);
+	fclose(mwiData);
+}
 
 int rCalc(int n) {
 	if (n < 0) {
@@ -51,8 +62,9 @@ peakTuple searchBack(QRS_params *params) {
 	//IF INFINITE LOOP CHANGE RETURN STATEMENT TO HANDLE MISSING PEAK
 }
 
-void peakDetection(QRS_params *params, int* postMWI, int n, FILE *output)
+void peakDetection(QRS_params *params, int* postMWI, int n)
 {
+	fprintf(mwiData, "%d\n",postMWI[n % 40]);
 	if (peakX2 > peakX1 && peakX2 > postMWI[n % 40]) {  //if a peak is found, save value and position (position being the n'th data input)
 		PEAKS[peakCount].peakPos = n;
 		PEAKS[peakCount].peakVal = peakX2;
