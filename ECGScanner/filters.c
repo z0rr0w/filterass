@@ -9,56 +9,29 @@ int nCalc(int n) {
 	return n;
 }
 
-void lowPassFilter(int n, int *x, int *y)
-{
-	
+void lowPassFilter(int n, int *x, int *y) {
 	y[n] = (2 * y[nCalc(n-1)]) - y[nCalc(n-2)] + (x[n] - (2*x[nCalc(n-6)])+x[nCalc(n-12)])/32;
-	
-	
-
-
-
-
 }
 
 
-void highPassFilter(int n, int *x, int *y){
-
+void highPassFilter(int n, int *x, int *y) {
 	y[n] = y[nCalc(n - 1)] - x[n]/32+x[nCalc(n-16)]- x[nCalc(n - 17)]+x[nCalc(n-32)]/32;
-	
-
-
-
-
-
 }
 
 
 void derivativeFilter(int n, int *x, int *y) {
-
 	y[n] = (2 * x[n] + x[nCalc(n - 1)] - x[nCalc(n - 3)] - 2 * x[nCalc(n - 4)])/8;
-	
-
-
 }
 
-void sqrFilter(int n, int *x, int *y)
-{
+void sqrFilter(int n, int *x, int *y) {
 	y[n] = x[n] * x[n];
-
-
 }
 
-void mwiFilter(int n, int *x, int *y)
-{
+void mwiFilter(int n, int *x, int *y) {
 	int mwiWindow = 30;
 	y[n] = 0;
 	for (int i = 1; i <= mwiWindow; i++) {
 		y[n] += x[nCalc(n -(mwiWindow - i))];
 	}
 	y[n] = y[n] / mwiWindow;
-
 }
-
-
-

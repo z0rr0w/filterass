@@ -8,8 +8,6 @@
 // The functions and object predefined are just for inspiration.
 // Please change orden,names arguments to fit your solution.
 
-
-
 int main()
 {	
 	QRS_params qsr_params = { 0 };       // Instance of the made avaiable through: #include "qsr.h"
@@ -20,7 +18,6 @@ int main()
 
 	FILE *file;                  // Pointer to a file object
 	file = openfile("ECG.txt");
-
 	
 	int* preLow[40] = { 0 };
 	int* postLow[40] = { 0 };
@@ -29,11 +26,9 @@ int main()
 	int* postSqr[40] = { 0 };
 	int* postMWI[40] = { 0 };
 
-	//THIS IS A SHIT IDEA, IMPROVE PEAKS PLEASSEEEEe..
-	
+	//THIS IS A SHIT IDEA, IMPROVE PEAKS PLEASSEEEEe..	
 	
 	//shit idea above
-
 	
 	//peakX3 is the result stored in postMWI
 	int n = 0;
@@ -50,16 +45,9 @@ int main()
 
 		peakDetection(&qsr_params,postMWI,n);
 		
-		
-
-
-
 		//printf("%d\n", postMWI[n % 40]); //for testing
 
-
-
 	   // peakDetection(&qsr_params); // Perform Peak Detection
-
 
 		++n;
 	}

@@ -4,7 +4,6 @@
 
 int getNextData(FILE *file)
 {
-
 	int nextData;
 	if (fscanf(file, "%d", &nextData) != EOF) {
 		return nextData;

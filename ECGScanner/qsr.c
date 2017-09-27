@@ -35,7 +35,6 @@ int avg1() {		//Averages RecentRR
 		ret += RecentRR[i];
 	}
 	return ret / 8;
-
 }
 
 int avg2() {		//Averages RecentRR_OK
@@ -55,8 +54,6 @@ peakTuple searchBack(QRS_params *params) {
 	return error;
 	//IF INFINITE LOOP CHANGE RETURN STATEMENT TO HANDLE MISSING PEAK
 }
-
-
 
 void peakDetection(QRS_params *params, int* postMWI, int n)
 {
@@ -85,10 +82,8 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 				RR_MISS = 166 * RR_Average2 / 100;
 				(*params).THRESHOLD1 = (*params).NPKF + 25 * ((*params).SPKF - (*params).NPKF) / 100;
 				(*params).THRESHOLD2 = (*params).THRESHOLD1 / 2;
-
 			}
-			else
-			{
+			else {
 				if (RR > RR_MISS) {
 					peakTuple temp = searchBack(params);
 					if (temp.peakPos != -1) {
@@ -103,26 +98,17 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 						RR_MISS = 166 * RR_Average1 / 100;
 						(*params).THRESHOLD1 = (*params).NPKF + 25 * ((*params).SPKF - (*params).NPKF) / 100;
 						(*params).THRESHOLD2 = (*params).THRESHOLD1 / 2;
-
 					}
 				}
-				
 			}
-
 		}
 		else {
 			(*params).NPKF = (125 * peakX2 + 875 * (*params).NPKF) / 1000;
 			(*params).THRESHOLD1 = (*params).NPKF + ((*params).SPKF - (*params).NPKF)*25/100; //TODO: find out if it's smart to round before division.
 			(*params).THRESHOLD2 = (*params).THRESHOLD1 / 2;
 		}
-
 		peakCount++;
 	}
 	peakX1 = peakX2; //rearrange numbers to find peaks
 	peakX2 = postMWI[n % 40];
-
-
-
-	
-
 }
