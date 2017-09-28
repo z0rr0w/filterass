@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct peakTuple PEAKS[256];
+struct peakTuple PEAKS[512];
 struct peakTuple rPeaks[256];
 int peakCount = 0,
 rPeakCount = 0,
@@ -13,7 +13,8 @@ RR_LOW = -1,
 RR_HIGH = INT_MAX,
 RR_Average1 = 0,
 RR_Average2 = 0,
-RR_MISS = 180;
+RR_MISS = 180,
+rrMissCount = 0;
 FILE *output ;
 FILE *mwiData;
 
@@ -41,6 +42,24 @@ void fileSetup() {
 void fileClose() {
 	fclose(output);
 	fclose(mwiData);
+}
+
+void printInfo() {
+	int diff;
+	int bpm = 60;
+	if (rPeakCount-1 >= 0) {
+		diff = (rPeaks[rPeakCount].peakPos - rPeaks[rPeakCount - 1].peakPos) / (250);
+		bpm = (int)(120 / diff); // (2/diff)*60
+	} 
+	printf("TimeValue: %d PeakValue: %d Pulse %d \n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal,bpm);
+	if (rPeaks[rPeakCount].peakVal < 2000) {
+		printf("WARNING! YOUR PULSE IS LOW!\n");
+	}
+	if (rrMissCount >= 5) {
+		printf("WARNING! UNEVEN HEARTRATE DETECTED! \n");
+	}
+
+
 }
 
 int rCalc(int n) {
@@ -101,10 +120,12 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 				RR = PEAKS[peakCount].peakPos - rPeaks[rPeakCount-1].peakPos;
 			}
 			if (RR_LOW < RR && RR < RR_HIGH) {
+				rrMissCount = 0;//An RR was between RR_LOW and RR_HIGH and the missCount is reset
 				addToRPeaks(PEAKS[peakCount]);
 				//rPeaks[rPeakCount] = PEAKS[peakCount];
 				//printf("%d %d\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
 				fprintf(output, "%d %d\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
+				printInfo();
 				rPeakCount++;
 				(*params).SPKF = PEAKS[peakCount].peakVal/8 + 7*(*params).SPKF/8;
 				RecentRR[rCalc((rPeakCount-1)%8)]=RR, RecentRR_OK[rCalc((rPeakCount-1)%8)] = RR; //rCalc might be superfluous (redundant)
@@ -118,6 +139,7 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 				(*params).THRESHOLD2 = (*params).THRESHOLD1 / 2;
 			}
 			else {
+				rrMissCount++; //RR missed both RR_LOW and RR_HIGH
 				if (RR > RR_MISS) {
 					peakTuple temp = searchBack(params);
 					if (temp.peakPos != -1) {
@@ -125,6 +147,7 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 						//rPeaks[rPeakCount] = temp;
 						//printf("%d %d sb\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
 						fprintf(output, "%d %d\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
+						printInfo();
 						(*params).SPKF =  (temp.peakVal)/4 + 3*(*params).SPKF/4;
 						RecentRR[rCalc(rPeakCount % 8)] = RR;
 						rPeakCount++;
