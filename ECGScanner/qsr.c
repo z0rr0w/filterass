@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 struct peakTuple PEAKS[512];
-struct peakTuple rPeaks[256];
+struct peakTuple rPeaks[256]; //Dividable by 8. Important when inserting in RecentRR
 int peakCount = 0,
 rPeakCount = 0,
 peakX1 = 0,
@@ -59,9 +59,9 @@ void printInfo() {
 		bpm = 60 / RRInSeconds;
 	}
 	
-	printf("TimeValue: %d PeakValue: %d Pulse %d \n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal,bpm);
+	printf("TimeValue: %d \t PeakValue: %d \t Pulse: %d \n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal,bpm);
 	if (rPeaks[rPeakCount].peakVal < 2000) {
-		printf("WARNING! YOUR PULSE IS WEAK!\n");
+		printf("WARNING! WEAK PULSE DETECTED!\n");
 	}
 	if (rrMissCount >= 5) {
 		printf("WARNING! UNEVEN HEARTRATE DETECTED! \n");
@@ -142,8 +142,7 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 				RR_LOW = 92 * RR_Average2 / 100;
 				RR_HIGH = 116 * RR_Average2 / 100;
 				RR_MISS = 166 * RR_Average2 / 100;
-				(*params).THRESHOLD1 = (*params).NPKF + ((*params).SPKF - 
-					(*params).NPKF)/4;
+				(*params).THRESHOLD1 = (*params).NPKF + ((*params).SPKF - (*params).NPKF)/4;
 				(*params).THRESHOLD2 = (*params).THRESHOLD1 / 2;
 			}
 			else {
