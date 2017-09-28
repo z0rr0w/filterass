@@ -32,8 +32,8 @@ void addToRPeaks(peakTuple peak) {
 	rPeaks[rPeakCount] = peak;
 }
 
-int RecentRR[8] = { 0 }; //151, 151, 151, 151, 151, 151, 151, 151}; //CHANGE THIS SO ITS POPULATED WITH FIRST FOUND rr INTERVAL
-int RecentRR_OK[8] = { 0 }; //151, 151, 151, 151, 151, 151, 151, 151};
+int RecentRR[8] = { 0 }; 
+int RecentRR_OK[8] = { 0 };
 
 void fileSetup() {
 	output = fopen("Output.txt", "w");
@@ -47,13 +47,21 @@ void fileClose() {
 void printInfo() {
 	int diff;
 	int bpm = 60;
-	if (rPeakCount-1 >= 0) {
-		diff = (rPeaks[rPeakCount].peakPos - rPeaks[rPeakCount - 1].peakPos) / (250);
-		bpm = (int)(120 / diff); // (2/diff)*60
-	} 
+	/*if (rPeakCount-1 >= 2) {
+		diff = (rPeaks[rPeakCount].peakPos - rPeaks[rPeakCount - 4].peakPos) / (250);
+		if (diff != 0) {
+			bpm = (int)(240 / diff); // (2/diff)*60
+		}
+		
+	} */
+	int RRInSeconds = (RR) / (250);
+	if (RRInSeconds != 0) {
+		bpm = 60 / RRInSeconds;
+	}
+	
 	printf("TimeValue: %d PeakValue: %d Pulse %d \n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal,bpm);
 	if (rPeaks[rPeakCount].peakVal < 2000) {
-		printf("WARNING! YOUR PULSE IS LOW!\n");
+		printf("WARNING! YOUR PULSE IS WEAK!\n");
 	}
 	if (rrMissCount >= 5) {
 		printf("WARNING! UNEVEN HEARTRATE DETECTED! \n");
