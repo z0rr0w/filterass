@@ -54,10 +54,12 @@ void printInfo() {
 		}
 		
 	} */
-	int RRInSeconds = (avg2())*100 / (250);
+	/*int RRInSeconds = (avg2())*100 / (250);
 	if (RRInSeconds != 0) {
 		bpm = 6000 / RRInSeconds;
-	}
+	}*/
+
+	bpm = (60 * 250) / avg2();
 	
 	printf("TimeValue: %d \t PeakValue: %d \t Pulse: %d \n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal,bpm);
 	if (rPeaks[rPeakCount].peakVal < 2000) {
@@ -150,7 +152,7 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 				rrMissCount++; //RR missed both RR_LOW and RR_HIGH
 				if (RR > RR_MISS) {
 					peakTuple temp = searchBack(params);
-					if (temp.peakPos != -1) {
+					if (temp.peakPos != -1 && temp.peakVal != 0) {
 						addToRPeaks(temp);
 						//rPeaks[rPeakCount] = temp;
 						//printf("%d %d sb\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
