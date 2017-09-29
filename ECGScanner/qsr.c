@@ -61,7 +61,7 @@ void printInfo() {
 	
 	printf("TimeValue: %d \t PeakValue: %d \t Pulse: %d \n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal,bpm);
 	if (rPeaks[rPeakCount].peakVal < 2000) {
-		printf("WARNING! WEAK PULSE DETECTED!\n");
+		printf("WARNING! LOW BLOOD PRESSURE DETECTED!\n");
 	}
 	if (rrMissCount >= 5) {
 		printf("WARNING! UNEVEN HEARTRATE DETECTED! \n");
