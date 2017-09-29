@@ -17,7 +17,7 @@ int main()
 	qsr_params.THRESHOLD2 = 250;
 
 	FILE *file;                  // Pointer to a file object
-	file = openfile("ECG900K.txt");
+	file = openfile("ECG.txt");
 
 	//
 

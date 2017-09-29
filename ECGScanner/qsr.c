@@ -54,9 +54,9 @@ void printInfo() {
 		}
 		
 	} */
-	int RRInSeconds = (RR) / (250);
+	int RRInSeconds = (avg2())*100 / (250);
 	if (RRInSeconds != 0) {
-		bpm = 60 / RRInSeconds;
+		bpm = 6000 / RRInSeconds;
 	}
 	
 	printf("TimeValue: %d \t PeakValue: %d \t Pulse: %d \n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal,bpm);
