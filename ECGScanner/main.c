@@ -13,11 +13,11 @@ int main()
 	QRS_params qsr_params = { 0 };       // Instance of the made avaiable through: #include "qsr.h"
 	qsr_params.NPKF = 0;
 	qsr_params.SPKF = 0;
-	qsr_params.THRESHOLD1 = 0;
-	qsr_params.THRESHOLD2 = 0;
+	qsr_params.THRESHOLD1 = 1000;
+	qsr_params.THRESHOLD2 = 500;
 
 	FILE *file;                  // Pointer to a file object
-	file = openfile("ECG.txt");
+	file = openfile("ECG900K.txt");
 
 	//
 

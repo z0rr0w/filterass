@@ -105,7 +105,8 @@ peakTuple searchBack(QRS_params *params) {
 
 void peakDetection(QRS_params *params, int* postMWI, int n)
 {
-	fprintf(mwiData, "%d\n",postMWI[n % 40]);
+
+	fprintf(mwiData, "%d %d\n",postMWI[n % 40],(*params).THRESHOLD1);
 	if (peakX2 > peakX1 && peakX2 > postMWI[n % 40]) {  //if a peak is found, save value and position (position being the n'th data input)
 		peakTuple temp;
 		temp.peakPos = n;

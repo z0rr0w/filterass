@@ -25,7 +25,11 @@ void derivativeFilter(int n, int *x, int *y) {
 }
 
 void sqrFilter(int n, int *x, int *y) {
-	y[n] = x[n] * x[n];
+	int temp = x[n] * x[n];
+	if (temp < 0) {
+		y[n] = -temp;
+	}
+	else y[n] = temp;
 }
 
 void mwiFilter(int n, int *x, int *y) {
