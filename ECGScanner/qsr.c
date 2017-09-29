@@ -2,18 +2,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct peakTuple PEAKS[256];
+struct peakTuple PEAKS[256]; //allows for roughly 2 seconds worth of peaks. might need to be larger.
 struct peakTuple rPeaks[256];
 int peakCount = 0,
 rPeakCount = 0,
 peakX1 = 0,
 peakX2 = 0,
 RR = 0,
-RR_LOW = -1,
-RR_HIGH = INT_MAX,
+RR_LOW = 0,//-1,
+RR_HIGH = 0,// INT_MAX,
 RR_Average1 = 0,
 RR_Average2 = 0,
-RR_MISS = 180;
+RR_MISS = 0;// 180;
 FILE *output ;
 FILE *mwiData;
 
@@ -78,7 +78,7 @@ peakTuple searchBack(QRS_params *params) {
 
 void peakDetection(QRS_params *params, int* postMWI, int n)
 {
-	fprintf(mwiData, "%d\n",postMWI[n % 40]);
+	fprintf(mwiData, "%d %d\n",postMWI[n % 40],(*params).THRESHOLD1);
 	if (peakX2 > peakX1 && peakX2 > postMWI[n % 40]) {  //if a peak is found, save value and position (position being the n'th data input)
 		peakTuple temp;
 		temp.peakPos = n;
