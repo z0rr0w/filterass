@@ -64,7 +64,7 @@ void printInfo() {
 		printf("WARNING! LOW BLOOD PRESSURE DETECTED!\n");
 	}
 	if (rrMissCount >= 5) {
-		printf("WARNING! UNEVEN HEARTRATE DETECTED! \n");
+		printf("WARNING! IRREGULAR HEARTRATE DETECTED! \n");
 	}
 
 
