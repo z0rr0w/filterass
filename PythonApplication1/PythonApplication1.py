@@ -2,7 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Your peak result
-peaks = np.loadtxt('C:/Users/Me/Documents/Visual Studio 2015/Projects/filterass/ECGScanner/Output.txt')
+#peaks = np.loadtxt('C:/Users/Me/Documents/Visual Studio 2015/Projects/filterass/ECGScanner/Output.txt')
+peaks = np.loadtxt('C:/Users/jacob/source/repos/filterass/ECGScanner/Output.txt')
+
 
 # Their R-peaks
 #rpeaks = np.loadtxt('Rpeak.txt')
@@ -24,7 +26,8 @@ y2 = []
     y2.append(point[1])'''
 
 # Load filtered heart data
-data = np.loadtxt('C:/Users/Me/Documents/Visual Studio 2015/Projects/filterass/ECGScanner/mwiOut.txt')
+#data = np.loadtxt('C:/Users/Me/Documents/Visual Studio 2015/Projects/filterass/ECGScanner/mwiOut.txt')
+data = np.loadtxt('C:/Users/jacob/source/repos/filterass/ECGScanner/mwiOut.txt')
 
 
 for point in data:
