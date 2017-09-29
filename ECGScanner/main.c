@@ -30,11 +30,7 @@ int main()
 	int* postSqr[40] = { 0 };
 	int* postMWI[40] = { 0 };
 
-	//THIS IS A SHIT IDEA, IMPROVE PEAKS PLEASSEEEEe..	
-	
-	//shit idea above
-	
-	//peakX3 is the result stored in postMWI
+
 	int n = 0;
 	int nextData;
 
@@ -50,12 +46,11 @@ int main()
 		sqrFilter(n % 40, postDer, postSqr);
 		mwiFilter(n % 40, postSqr, postMWI);
 
-		peakDetection(&qsr_params,postMWI,n);
+		peakDetection(&qsr_params,postMWI,n); // Perform Peak Detection
 
 		
 		//printf("%d\n", postLow[n % 40]); //for testing
 
-	   // peakDetection(&qsr_params); // Perform Peak Detection
 
 		++n;
 	}
