@@ -1,28 +1,25 @@
 #include "filters.h"
-
+#include <time.h>
 
 int nCalc(int n) {
 	if (n < 0) {
 		return 40 + n;
-		//return (40 + n) % 40;
 	}
 	return n;
 }
 
 void lowPassFilter(int n, int *x, int *y) {
-	//y[n] = 2 * y[nCalc(n-1)] - y[nCalc(n-2)] + (x[n] - 2*x[nCalc(n-6)]+x[nCalc(n-12)])/32;
-	y[n] = (2 * (y[nCalc(n - 1)]-7512) - (y[nCalc(n - 2)] - 2*7512)) + (x[n] - ((2 * x[nCalc(n - 6)])) + (x[nCalc(n - 12)])) / 32;
-	//y[n] = ((2 * y[nCalc(n - 1)] - y[nCalc(n - 2)])+5000 + (x[n] - 2 * x[nCalc(n - 6)] + x[nCalc(n - 12)]) / 32)-5000;
-	//y[n%40] = (2 * y[nCalc(n%40 - 1)] - y[nCalc(n%40 - 2)] + (x[n%40] - 2 * x[nCalc(n%40 - 6)] + x[nCalc(n%40 - 12)]) / 32)-n;
-	//y[n] = (2 * y[nCalc(n - 1)] - y[nCalc(n - 2)] + (x[n] - 2 * x[nCalc(n - 6)] + x[nCalc(n - 12)]) / 32);
-	//Please send halp
+
+	y[n] = 2 * y[nCalc(n-1)] - y[nCalc(n-2)] + (x[n] - 2*x[nCalc(n-6)]+x[nCalc(n-12)])/32;
+	//Better to just calculate the the differences that are use in the highPassFilter. These are
+	//relative and will not go towards INT_MIN.
+
 	
 }
 
 
 void highPassFilter(int n, int *x, int *y) {
 	y[n] = y[nCalc(n - 1)] - x[n]/32+x[nCalc(n-16)]- x[nCalc(n - 17)]+x[nCalc(n-32)]/32;
-	//y[n] = y[nCalc(n - 1)] - ((x[n]-5000 )/ (32 + x[nCalc(n - 16)]-5000)) - x[nCalc(n - 17)]-5000 + ((x[nCalc(n - 32)] - 5000)/ 32);
 }
 
 

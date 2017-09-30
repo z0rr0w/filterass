@@ -136,6 +136,7 @@
     <Text Include="mwiOutput.txt" />
     <Text Include="Output.txt" />
     <Text Include="sqrOutput.txt" />
+    <Text Include="timeOutput.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
