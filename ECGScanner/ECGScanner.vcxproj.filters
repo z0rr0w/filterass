@@ -52,5 +52,20 @@
     <Text Include="mwiOut.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="lowPassOutput.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="highPassOutput.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="derOutput.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="sqrOutput.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="mwiOutput.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

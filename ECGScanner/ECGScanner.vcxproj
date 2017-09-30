@@ -125,12 +125,17 @@
     <ClInclude Include="sensor.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="derOutput.txt" />
     <Text Include="ECG.txt">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </Text>
     <Text Include="ECG900K.txt" />
+    <Text Include="highPassOutput.txt" />
+    <Text Include="lowPassOutput.txt" />
     <Text Include="mwiOut.txt" />
+    <Text Include="mwiOutput.txt" />
     <Text Include="Output.txt" />
+    <Text Include="sqrOutput.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

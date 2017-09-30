@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 struct peakTuple PEAKS[512];
-struct peakTuple rPeaks[256]; //Dividable by 8. Important when inserting in RecentRR
+struct peakTuple rPeaks[16]; //Dividable by 8. Important when inserting in RecentRR
 int peakCount = 0,
 rPeakCount = 0,
 peakX1 = 0,

@@ -18,6 +18,14 @@ int main()
 
 	FILE *file;                  // Pointer to a file object
 	file = openfile("ECG900K.txt");
+	//file = openfile("ECG.txt");
+
+	FILE *lowPassFile = fopen("lowPassOutput.txt","w");
+	FILE *highPassFile = fopen("highPassOutput.txt","w");
+	FILE *derFile = fopen("derOutput.txt","w");
+	FILE *sqrFile = fopen("sqrOutput.txt","w");
+	FILE *mwiFile = fopen("mwiOutput.txt", "w");
+
 
 	//
 
@@ -40,20 +48,30 @@ int main()
 	while((nextData=getNextData(file))!= INT_MIN){        // Read Data from Sensor
 		preLow[n%40] = nextData;
                                 
-		lowPassFilter(n%40,preLow, postLow);            // Filter Data
+		lowPassFilter(n % 40,preLow, postLow);            // Filter Data
+		fprintf(lowPassFile, "preLow: %d \t postLow: %d \n",preLow[n % 40], postLow[n % 40]);
 		highPassFilter(n % 40, postLow, postHigh);
+		fprintf(highPassFile, "postLow: %d \t postHigh: %d \n", postLow[n%40], postHigh[n % 40]);
 		derivativeFilter(n % 40, postHigh, postDer);
+		fprintf(derFile, "postHigh: %d \t postDer %d \n", postHigh[n%40], postDer[n % 40]);
 		sqrFilter(n % 40, postDer, postSqr);
+		fprintf(sqrFile, "postDer: %d \t postSqr: %d \n", postDer[n%40], postSqr[n % 40]);
 		mwiFilter(n % 40, postSqr, postMWI);
+		fprintf(sqrFile, "postSqr: %d \t postMwi: %d \n", postSqr[n % 40], postMWI[n % 40]);
 
 		peakDetection(&qsr_params,postMWI,n); // Perform Peak Detection
 
 		
 		//printf("%d\n", postLow[n % 40]); //for testing
 
-
-		++n;
+		n++;
+		
 	}
+	fclose(lowPassFile);
+	fclose(highPassFile);
+	fclose(derFile);
+	fclose(sqrFile);
+	fclose(mwiFile);
 	getchar();
 	
 	return 0;
