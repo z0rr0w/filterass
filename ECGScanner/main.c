@@ -3,7 +3,6 @@
 #include "qsr.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 
 // Main function for organizing the program execution.
 // The functions and object predefined are just for inspiration.
@@ -19,8 +18,8 @@ int main()
 	qsr_params.THRESHOLD2 = 500;
 
 	FILE *file;                  // Pointer to a file object
-	//file = openfile("ECG900K.txt");
-	file = openfile("ECG.txt");
+	file = openfile("ECG900K.txt");
+	//file = openfile("ECG.txt");
 
 	FILE *lowPassFile = fopen("lowPassOutput.txt","w");
 	FILE *highPassFile = fopen("highPassOutput.txt","w");
@@ -32,7 +31,7 @@ int main()
 
 
 
-
+	int minLowPass = 0;
 	
 	int* preLow[filterCap] = { 0 };
 	int* postLow[filterCap] = { 0 };
@@ -49,41 +48,28 @@ int main()
 
 	fileSetup();
 
-	clock_t start, end;
-	double cpu_time_used;
-
-
 	while((nextData=getNextData(file))!= INT_MIN){        // Read Data from Sensor
 		preLow[nMod] = nextData;
 
-
-
-		start = clock(); //For testing
-
-		lowPassFilter(nMod,preLow, postLow);            // Filter Data
-
-
-		end = clock();
-		cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
-		fprintf(timeFile, "Time of lowPass: %d \n", cpu_time_used);
-		fprintf(lowPassFile, "preLow: %d \t postLow: %d \n",preLow[nMod], postLow[nMod]);
-		
-
+		lowPassFilter(nMod,preLow, postLow, &minLowPass);            // Filter Data
+		//fprintf(lowPassFile, "preLow: %d \t postLow: %d \n",preLow[nMod], postLow[nMod]);
 
 		highPassFilter(nMod, postLow, postHigh);
-		fprintf(highPassFile, "postLow: %d \t postHigh: %d \n", postLow[nMod], postHigh[nMod]);
+		//fprintf(highPassFile, "postLow: %lf \t postHigh: %lf \n", postLow[nMod], postHigh[nMod]);
+
 		derivativeFilter(nMod, postHigh, postDer);
-		fprintf(derFile, "postHigh: %d \t postDer %d \n", postHigh[nMod], postDer[nMod]);
+		//fprintf(derFile, "postHigh: %d \t postDer %d \n", postHigh[nMod], postDer[nMod]);
+
 		sqrFilter(nMod, postDer, postSqr);
-		fprintf(sqrFile, "postDer: %d \t postSqr: %d \n", postDer[nMod], postSqr[nMod]);
+		//fprintf(sqrFile, "postDer: %d \t postSqr: %d \n", postDer[nMod], postSqr[nMod]);
+
+
 		mwiFilter(nMod, postSqr, postMWI);
 		fprintf(sqrFile, "postSqr: %d \t postMwi: %d \n", postSqr[nMod], postMWI[nMod]);
 
 		peakDetection(&qsr_params,postMWI,n); // Perform Peak Detection
-
-		
-
 		n++;
+		nMod = n % filterCap;
 		
 	}
 	fclose(lowPassFile);
@@ -91,7 +77,6 @@ int main()
 	fclose(derFile);
 	fclose(sqrFile);
 	fclose(mwiFile);
-	fclose(timeFile);
 	getchar();
 	
 	return 0;

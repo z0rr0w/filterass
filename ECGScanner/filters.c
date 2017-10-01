@@ -1,5 +1,4 @@
 #include "filters.h"
-#include <time.h>
 
 int nCalc(int n) {
 	if (n < 0) {
@@ -8,9 +7,29 @@ int nCalc(int n) {
 	return n;
 }
 
-void lowPassFilter(int n, int *x, int *y) {
+void lowPassFilter(int n, int *x, int *y, int *min) {
 
-	y[n] = 2 * y[nCalc(n-1)] - y[nCalc(n-2)] + (x[n] - 2*x[nCalc(n-6)]+x[nCalc(n-12)])/32;
+	int y1 = y[nCalc(n - 1)] + *min;
+	int y2 = y[nCalc(n - 2)] + *min;
+	
+
+	y[n] = 2 * y1 - y2 + (x[n] - 2 * x[nCalc(n - 6)] + x[nCalc(n - 12)]) / 32 - *min;
+	if (n == 34) {
+		*min = y[0];
+		for (int i = 0; i < 40; i++) { //Find minimum in array
+			if (y[i] < *min)
+			{
+				*min = y[i];
+			}
+		}
+		for (int i = 0; i < 40; i++)
+		{ //Subtract minimum from all elements in array;
+			if (y[i] - *min >= 0) {
+				y[i] = y[i] - *min;
+			}
+		}
+	}
+	//y[n] = 2 * y[nCalc(n-1)] - y[nCalc(n-2)] + (x[n] - 2*x[nCalc(n-6)]+x[nCalc(n-12)])/32;
 	//Better to just calculate the the differences that are use in the highPassFilter. These are
 	//relative and will not go towards INT_MIN.
 

@@ -67,8 +67,5 @@
     <Text Include="mwiOutput.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="timeOutput.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
   </ItemGroup>
 </Project>

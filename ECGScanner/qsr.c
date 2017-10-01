@@ -45,7 +45,7 @@ void fileClose() {
 }
 
 void printInfo() {
-	int diff;
+	//int diff;
 	int bpm = 60;
 	/*if (rPeakCount-1 >= 2) {
 		diff = (rPeaks[rPeakCount].peakPos - rPeaks[rPeakCount - 4].peakPos) / (250);
@@ -102,7 +102,6 @@ peakTuple searchBack(QRS_params *params) {
 	}
 	peakTuple error = { -1 };
 	return error;
-	//IF INFINITE LOOP CHANGE RETURN STATEMENT TO HANDLE MISSING PEAK
 }
 
 void peakDetection(QRS_params *params, int* postMWI, int n)
@@ -110,12 +109,10 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 
 	fprintf(mwiData, "%d %d\n",postMWI[n % 40],(*params).THRESHOLD1);
 	if (peakX2 > peakX1 && peakX2 > postMWI[n % 40]) {  //if a peak is found, save value and position (position being the n'th data input)
-		peakTuple temp;
-		temp.peakPos = n;
-		temp.peakVal = peakX2;
-		addToPeaks(temp);
-		//PEAKS[peakCount].peakPos = n;
-		//PEAKS[peakCount].peakVal = peakX2;
+		peakTuple peak;
+		peak.peakPos = n;
+		peak.peakVal = peakX2;
+		addToPeaks(peak);
 		
 		if (peakX2 > (*params).THRESHOLD1) { //remember to do fun stuff with threshold1 it needs to be calgulated.
 			if (rPeakCount == 0) {
@@ -133,13 +130,12 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 			if (RR_LOW < RR && RR < RR_HIGH) {
 				rrMissCount = 0;//An RR was between RR_LOW and RR_HIGH and the missCount is reset
 				addToRPeaks(PEAKS[peakCount]);
-				//rPeaks[rPeakCount] = PEAKS[peakCount];
-				//printf("%d %d\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
 				fprintf(output, "%d %d\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
 				printInfo();
 				rPeakCount++;
 				(*params).SPKF = PEAKS[peakCount].peakVal/8 + 7*(*params).SPKF/8;
-				RecentRR[rCalc((rPeakCount-1)%8)]=RR, RecentRR_OK[rCalc((rPeakCount-1)%8)] = RR; //rCalc might be superfluous (redundant)
+				RecentRR[rCalc((rPeakCount - 1) % 8)] = RR;
+				RecentRR_OK[rCalc((rPeakCount - 1) % 8)] = RR; //rCalc might be superfluous (redundant)
 				RR_Average2 = avg2();
 				RR_Average1 = avg1();
 				RR_LOW = 92 * RR_Average2 / 100;
@@ -151,14 +147,14 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 			else {
 				rrMissCount++; //RR missed both RR_LOW and RR_HIGH
 				if (RR > RR_MISS) {
-					peakTuple temp = searchBack(params);
-					if (temp.peakPos != -1 && temp.peakVal != 0) {
-						addToRPeaks(temp);
-						//rPeaks[rPeakCount] = temp;
+					peakTuple peak2 = searchBack(params);
+					if (peak2.peakVal != -1) {
+						addToRPeaks(peak2);
 						//printf("%d %d sb\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
 						fprintf(output, "%d %d\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
 						printInfo();
-						(*params).SPKF =  (temp.peakVal)/4 + 3*(*params).SPKF/4;
+						(*params).SPKF =  peak2.peakVal/4 + 3*(*params).SPKF/4;
+						RR = peak.peakPos - peak2.peakPos;
 						RecentRR[rCalc(rPeakCount % 8)] = RR;
 						rPeakCount++;
 						RR_Average1 = avg1();
@@ -180,5 +176,4 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 	}
 	peakX1 = peakX2; //rearrange numbers to find peaks
 	peakX2 = postMWI[n % 40];
-	//printf("%d\n", postMWI[n % 40]);
 }
