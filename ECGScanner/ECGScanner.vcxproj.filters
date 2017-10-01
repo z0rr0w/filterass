@@ -61,10 +61,10 @@
     <Text Include="derOutput.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="sqrOutput.txt">
+    <Text Include="mwiOutput.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="mwiOutput.txt">
+    <Text Include="threshholds.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
