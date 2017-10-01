@@ -16,7 +16,7 @@ for point in peaks:
 data = np.loadtxt('C:/Users/Jens/Source/Repos/filterass/ECGScanner/mwiOut.txt')
 
 # Heart data
-plt.plot(data, color='green')
+plt.plot(data, color='black')
 
 # Your peaks
 plt.scatter(x,y, color='blue')
@@ -31,8 +31,8 @@ for point in thresholds:
     thresh2.append(point[1])
 
 
-plt.plot(thresh1, color='orange')
-plt.plot(thresh2, color='purple')
+plt.plot(thresh1, color='red')
+plt.plot(thresh2, color='orange')
 
 '''unstable = np.loadtxt('unstable.txt')
 
