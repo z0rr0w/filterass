@@ -52,9 +52,6 @@
     <Text Include="mwiOut.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="lowPassOutput.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
     <Text Include="highPassOutput.txt">
       <Filter>Resource Files</Filter>
     </Text>
@@ -65,6 +62,9 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="threshholds.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="irreg.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

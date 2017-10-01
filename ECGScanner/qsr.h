@@ -32,6 +32,8 @@ void addToPeaks(peakTuple peak);
 void addToRPeaks(peakTuple peak);
 
 void printInfo();
+void printInfoModif();
+
 
 int rCalc(int n);
 int avg1();

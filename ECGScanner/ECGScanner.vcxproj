@@ -131,7 +131,7 @@
     </Text>
     <Text Include="ECG900K.txt" />
     <Text Include="highPassOutput.txt" />
-    <Text Include="lowPassOutput.txt" />
+    <Text Include="irreg.txt" />
     <Text Include="mwiOut.txt" />
     <Text Include="mwiOutput.txt" />
     <Text Include="Output.txt" />
