@@ -65,7 +65,7 @@ int main()
 
 
 		mwiFilter(nMod, postSqr, postMWI);
-		fprintf(sqrFile, "postSqr: %d \t postMwi: %d \n", postSqr[nMod], postMWI[nMod]);
+		//fprintf(sqrFile, "postSqr: %d \t postMwi: %d \n", postSqr[nMod], postMWI[nMod]);
 
 		peakDetection(&qsr_params,postMWI,n); // Perform Peak Detection
 		n++;
