@@ -18,6 +18,7 @@ rrMissCount = 0;
 FILE *output ;
 FILE *mwiOut;
 FILE *thresholds;
+FILE *irreg;
 
 void addToPeaks(peakTuple peak) {
 	if (peakCount == sizeof(PEAKS)/sizeof(PEAKS[0])){
@@ -40,11 +41,14 @@ void fileSetup() {
 	output = fopen("Output.txt", "w");
 	mwiOut = fopen("mwiOut.txt", "w");
 	thresholds = fopen("threshholds.txt", "w");
+	irreg = fopen("irreg.txt", "w");
+
 }
 void fileClose() {
 	fclose(output);
 	fclose(mwiOut);
 	fclose(thresholds);
+	fclose(irreg);
 }
 
 void printInfo() {
@@ -67,12 +71,21 @@ void printInfo() {
 	printf("TimeValue: %d \t PeakValue: %d \t Pulse: %d \n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal,bpm);
 	if (rPeaks[rPeakCount].peakVal < 2000) {
 		printf("WARNING! LOW BLOOD PRESSURE DETECTED!\n");
+		
 	}
 	if (rrMissCount >= 5) {
 		printf("WARNING! IRREGULAR HEARTRATE DETECTED! \n");
+		fprintf(irreg, "%d %d\n", rPeaks[rPeakCount].peakPos, 0);
 	}
 
 
+}
+
+void printInfoModif() {
+	if (rrMissCount >= 5) {
+		printf("WARNING! IRREGULAR HEARTRATE DETECTED! \n");
+		fprintf(irreg, "%d %d\n", rPeaks[rPeakCount].peakPos, 0);
+	}
 }
 
 int rCalc(int n) {
@@ -170,6 +183,18 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 						(*params).THRESHOLD2 = (*params).THRESHOLD1 / 2;
 					}
 				}
+				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT
+				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT
+				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT
+				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT
+
+				printInfoModif(); //TENTATIVE MIGTH BE STUPED
+
+				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT
+				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT
+				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT	
+				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT
+				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT
 			}
 		}
 		else {

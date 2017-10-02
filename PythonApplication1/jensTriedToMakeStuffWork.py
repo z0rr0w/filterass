@@ -56,5 +56,14 @@ searchBack = np.loadtxt('searchBack.txt')
 for points in searchBack:
 	x1, y1 = [points[0], points[1]], [points[2],points[3]]
 	plt.plot(x1, y1, color='pink', marker='o')'''
+irregs = np.loadtxt('C:/Users/Jens/Source/Repos/filterass/ECGScanner/irreg.txt')
+irrx = []
+irry = []
+
+for point in irregs:
+    irrx.append(point[0])
+    irry.append(point[1])
+
+plt.scatter(irrx,irry,color='red')
 
 plt.show()
