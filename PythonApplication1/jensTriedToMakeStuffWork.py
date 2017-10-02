@@ -2,7 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Your peak result
-peaks = np.loadtxt('C:/Users/Jens/Source/Repos/filterass/ECGScanner/Output.txt')
+##peaks = np.loadtxt('C:/Users/Jens/Source/Repos/filterass/ECGScanner/Output.txt')
+peaks = np.loadtxt('C:/Users/jacob/source/repos/filterass/ECGScanner/Output.txt')
+
 
 x = []
 y = []
@@ -13,7 +15,8 @@ for point in peaks:
     y.append(point[1])
 
 # Load filtered heart data
-data = np.loadtxt('C:/Users/Jens/Source/Repos/filterass/ECGScanner/mwiOut.txt')
+#data = np.loadtxt('C:/Users/Jens/Source/Repos/filterass/ECGScanner/mwiOut.txt')
+data = np.loadtxt('C:/Users/jacob/source/repos/filterass/ECGScanner/mwiOut.txt')
 
 # Heart data
 plt.plot(data, color='black')
@@ -24,7 +27,8 @@ plt.scatter(x,y, color='blue')
 thresh1 = []
 thresh2 = []
 
-thresholds = np.loadtxt('C:/Users/Jens/Source/Repos/filterass/ECGScanner/threshholds.txt')
+#thresholds = np.loadtxt('C:/Users/Jens/Source/Repos/filterass/ECGScanner/threshholds.txt')
+thresholds = np.loadtxt('C:/Users/jacob/source/repos/filterass/ECGScanner/threshholds.txt')
 
 for point in thresholds:
     thresh1.append(point[0])
