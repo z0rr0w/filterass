@@ -135,6 +135,7 @@
     <Text Include="mwiOut.txt" />
     <Text Include="mwiOutput.txt" />
     <Text Include="Output.txt" />
+    <Text Include="searchBack.txt" />
     <Text Include="threshholds.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

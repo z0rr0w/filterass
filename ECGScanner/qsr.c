@@ -19,6 +19,7 @@ FILE *output ;
 FILE *mwiOut;
 FILE *thresholds;
 FILE *irreg;
+FILE *searchBackFile;
 
 void addToPeaks(peakTuple peak) {
 	if (peakCount == sizeof(PEAKS)/sizeof(PEAKS[0])){
@@ -42,6 +43,7 @@ void fileSetup() {
 	mwiOut = fopen("mwiOut.txt", "w");
 	thresholds = fopen("threshholds.txt", "w");
 	irreg = fopen("irreg.txt", "w");
+	searchBackFile = fopen("searchBack.txt", "w");
 
 }
 void fileClose() {
@@ -49,6 +51,7 @@ void fileClose() {
 	fclose(mwiOut);
 	fclose(thresholds);
 	fclose(irreg);
+	fclose(searchBackFile);
 }
 
 void printInfo() {
@@ -166,6 +169,7 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 				rrMissCount++; //RR missed both RR_LOW and RR_HIGH
 				if (RR > RR_MISS) {
 					peakTuple peak2 = searchBack(params);
+					fprintf(searchBackFile, "%d \n", n);
 					if (peak2.peakVal != -1) {
 						addToRPeaks(peak2);
 						//printf("%d %d sb\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);

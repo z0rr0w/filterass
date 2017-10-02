@@ -67,5 +67,8 @@
     <Text Include="irreg.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="searchBack.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
