@@ -8,6 +8,7 @@ int nCalc(int n) {
 }
 
 void lowPassFilter(int n, int *x, int *y, int *min) {
+	//Writing by Jacob Bruun (s164410)
 
 	int y1 = y[nCalc(n - 1)] + *min;
 	int y2 = y[nCalc(n - 2)] + *min;
