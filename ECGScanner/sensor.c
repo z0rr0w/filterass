@@ -5,7 +5,7 @@
 int getNextData(FILE *file)
 {
 	int nextData;
-	if (fscanf(file, "%d", &nextData) != EOF) {
+	if (fscanf(file, "%d", &nextData) != EOF) { //Read the next datapoint unless it is the end of the file
 		return nextData;
 	}
 

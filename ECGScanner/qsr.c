@@ -38,7 +38,7 @@ void addToRPeaks(peakTuple peak) {
 int RecentRR[8] = { 0 }; 
 int RecentRR_OK[8] = { 0 };
 
-void fileSetup() {
+void fileSetup() { //Opens files for testing purposes
 	output = fopen("Output.txt", "w");
 	mwiOut = fopen("mwiOut.txt", "w");
 	thresholds = fopen("threshholds.txt", "w");
@@ -46,7 +46,7 @@ void fileSetup() {
 	searchBackFile = fopen("searchBack.txt", "w");
 
 }
-void fileClose() {
+void fileClose() { //Closes the test files
 	fclose(output);
 	fclose(mwiOut);
 	fclose(thresholds);
@@ -54,21 +54,8 @@ void fileClose() {
 	fclose(searchBackFile);
 }
 
-void printInfo() {
-	//int diff;
+void printInfo() { //Prints info to the user
 	int bpm = 60;
-	/*if (rPeakCount-1 >= 2) {
-		diff = (rPeaks[rPeakCount].peakPos - rPeaks[rPeakCount - 4].peakPos) / (250);
-		if (diff != 0) {
-			bpm = (int)(240 / diff); // (2/diff)*60
-		}
-		
-	} */
-	/*int RRInSeconds = (avg2())*100 / (250);
-	if (RRInSeconds != 0) {
-		bpm = 6000 / RRInSeconds;
-	}*/
-
 	bpm = (60 * 250) / avg2();
 	
 	printf("TimeValue: %d \t PeakValue: %d \t Pulse: %d \n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal,bpm);
@@ -80,16 +67,8 @@ void printInfo() {
 		printf("WARNING! IRREGULAR HEARTRATE DETECTED! \n");
 		fprintf(irreg, "%d %d\n", rPeaks[rPeakCount].peakPos, 0);
 	}
-
-
 }
 
-void printInfoModif() {
-	if (rrMissCount >= 5) {
-		printf("WARNING! IRREGULAR HEARTRATE DETECTED! \n");
-		fprintf(irreg, "%d %d\n", rPeaks[rPeakCount].peakPos, 0);
-	}
-}
 
 int rCalc(int n) {
 	if (n < 0) {
@@ -135,7 +114,7 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 		peak.peakVal = peakX2;
 		addToPeaks(peak);
 		
-		if (peakX2 > (*params).THRESHOLD1) { //remember to do fun stuff with threshold1 it needs to be calgulated.
+		if (peakX2 > (*params).THRESHOLD1) { //Check wheter the found peak is above threshold 1
 			if (rPeakCount == 0) {
 				RR = PEAKS[peakCount].peakPos;
 				for (int i = 0; i < 8; i++) {
@@ -151,12 +130,15 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 			if (RR_LOW < RR && RR < RR_HIGH) {
 				rrMissCount = 0;//An RR was between RR_LOW and RR_HIGH and the missCount is reset
 				addToRPeaks(PEAKS[peakCount]);
+
 				fprintf(output, "%d %d\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
 				printInfo();
+
+				//Update the parameters
 				rPeakCount++;
 				(*params).SPKF = PEAKS[peakCount].peakVal/8 + 7*(*params).SPKF/8;
 				RecentRR[rCalc((rPeakCount - 1) % 8)] = RR;
-				RecentRR_OK[rCalc((rPeakCount - 1) % 8)] = RR; //rCalc might be superfluous (redundant)
+				RecentRR_OK[rCalc((rPeakCount - 1) % 8)] = RR;
 				RR_Average2 = avg2();
 				RR_Average1 = avg1();
 				RR_LOW = 92 * RR_Average2 / 100;
@@ -168,13 +150,13 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 			else {
 				rrMissCount++; //RR missed both RR_LOW and RR_HIGH
 				if (RR > RR_MISS) {
-					peakTuple peak2 = searchBack(params);
+					peakTuple peak2 = searchBack(params); //Perform searchback
 					fprintf(searchBackFile, "%d \n", n);
 					if (peak2.peakVal != -1) {
 						addToRPeaks(peak2);
-						//printf("%d %d sb\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
 						fprintf(output, "%d %d\n", rPeaks[rPeakCount].peakPos, rPeaks[rPeakCount].peakVal);
 						printInfo();
+						//Update parameters
 						(*params).SPKF =  peak2.peakVal/4 + 3*(*params).SPKF/4;
 						RR = peak.peakPos - peak2.peakPos;
 						RecentRR[rCalc(rPeakCount % 8)] = RR;
@@ -187,23 +169,12 @@ void peakDetection(QRS_params *params, int* postMWI, int n)
 						(*params).THRESHOLD2 = (*params).THRESHOLD1 / 2;
 					}
 				}
-				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT
-				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT
-				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT
-				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT
-
-				printInfoModif(); //TENTATIVE MIGTH BE STUPED
-
-				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT
-				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT
-				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT	
-				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT
-				//DONT HAND THIS IN UNLESS SURE IT IS RIGHT
 			}
 		}
 		else {
+			//No peaks were found. Update params
 			(*params).NPKF = (125 * peakX2 + 875 * (*params).NPKF) / 1000;
-			(*params).THRESHOLD1 = (*params).NPKF + ((*params).SPKF - (*params).NPKF)*25/100; //TODO: find out if it's smart to round before division.
+			(*params).THRESHOLD1 = (*params).NPKF + ((*params).SPKF - (*params).NPKF)*25/100;
 			(*params).THRESHOLD2 = (*params).THRESHOLD1 / 2;
 		}
 		peakCount++;
